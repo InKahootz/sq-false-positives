@@ -1,10 +1,9 @@
-﻿using System;
-using System.Composition;
+﻿using System.ComponentModel.Composition;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace sq_false_positives;
 
-class DbContext { }
-class DbContextOptionsBuilder<T> where T : DbContext { }
 
 interface IDbContextOptionsBuilderDecorator<T> where T : DbContext 
 {
@@ -16,7 +15,7 @@ class WildFooBuilderDecorator<T> : IDbContextOptionsBuilderDecorator<T> where T 
 {
     public DbContextOptionsBuilder<T> Apply(DbContextOptionsBuilder<T> builder)
     {
-        // builder.UseSQLite(); // Some extension method that is based on T being DbContext
+        builder.UseSqlite();
 
         return builder;
     }
