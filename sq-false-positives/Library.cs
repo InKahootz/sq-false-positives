@@ -1,21 +1,21 @@
-﻿using System.Composition;
-
-using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.Composition;
 
 namespace sq_false_positives;
 
+class Foo { }
+class FooOptionsBuilder<T> where T : Foo { }
 
-interface IDbContextOptionsBuilderDecorator<T> where T : DbContext 
+interface IDbContextOptionsBuilderDecorator<T> where T : Foo 
 {
-    DbContextOptionsBuilder<T> Apply(DbContextOptionsBuilder<T> builder);
+    FooOptionsBuilder<T> Apply(FooOptionsBuilder<T> builder);
 }
 
 [Export(typeof(IDbContextOptionsBuilderDecorator<>))]
-class WildFooBuilderDecorator<T> : IDbContextOptionsBuilderDecorator<T> where T : DbContext
+class WildFooBuilderDecorator<T> : IDbContextOptionsBuilderDecorator<T> where T : Foo
 {
-    public DbContextOptionsBuilder<T> Apply(DbContextOptionsBuilder<T> builder)
+    public FooOptionsBuilder<T> Apply(FooOptionsBuilder<T> builder)
     {
-        builder.UseSqlite();
+        // builder.UseSqlite(); // Some extension method that is based on T being Foo
 
         return builder;
     }
