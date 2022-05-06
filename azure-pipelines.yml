@@ -1,0 +1,26 @@
+trigger:
+  - master
+  
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'sonarcloud-sc'
+    organization: 'hymccord'
+    scannerMode: 'MSBuild'
+    projectKey: 'hymccord_sq-false-positive'
+    projectName: 'sq-false-positives'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'build'
+    projects: '**\*.csproj'
+
+- task: SonarCloudAnalyze@1
